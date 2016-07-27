@@ -1,200 +1,144 @@
-/*
-	Phantom by HTML5 UP
-	html5up.net | @n33co
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
-*/
+require([], function (){
 
-(function($) {
+    var isMobileInit = false;
+    var loadMobile = function(){
+        require(['/js/mobile.js'], function(mobile){
+            mobile.init();
+            isMobileInit = true;
+        });
+    }
+    var isPCInit = false;
+    var loadPC = function(){
+        require(['/js/pc.js'], function(pc){
+            pc.init();
+            isPCInit = true;
+        });
+    }
 
-	skel.breakpoints({
-		xlarge:	'(max-width: 1680px)',
-		large:	'(max-width: 1280px)',
-		medium:	'(max-width: 980px)',
-		small:	'(max-width: 736px)',
-		xsmall:	'(max-width: 480px)'
-	});
+    var browser={
+        versions:function(){
+        var u = window.navigator.userAgent;
+        return {
+            trident: u.indexOf('Trident') > -1, //IE内核
+            presto: u.indexOf('Presto') > -1, //opera内核
+            webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+            gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+            mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+            ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+            android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+            iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+            iPad: u.indexOf('iPad') > -1, //是否为iPad
+            webApp: u.indexOf('Safari') == -1 ,//是否为web应用程序，没有头部与底部
+            weixin: u.indexOf('MicroMessenger') == -1 //是否为微信浏览器
+            };
+        }()
+    }
 
-	$(function() {
+    $(window).bind("resize", function(){
+        if(isMobileInit && isPCInit){
+            $(window).unbind("resize");
+            return;
+        }
+        var w = $(window).width();
+        if(w >= 700){
+            loadPC();
+        }else{
+            loadMobile();
+        }
+    });
 
-		var	$window = $(window),
-			$body = $('body');
+    if(browser.versions.mobile === true || $(window).width() < 700){
+        loadMobile();
+    }else{
+        loadPC();
+    }
 
-		// Disable animations/transitions until the page has loaded.
-			$body.addClass('is-loading');
+    //是否使用fancybox
+    if(yiliaConfig.fancybox === true){
+        require(['/fancybox/jquery.fancybox.js'], function(pc){
+            var isFancy = $(".isFancy");
+            if(isFancy.length != 0){
+                var imgArr = $(".article-inner img");
+                for(var i=0,len=imgArr.length;i<len;i++){
+                    var src = imgArr.eq(i).attr("src");
+                    var title = imgArr.eq(i).attr("alt");
+                    imgArr.eq(i).replaceWith("<a href='"+src+"' title='"+title+"' rel='fancy-group' class='fancy-ctn fancybox'><img src='"+src+"' title='"+title+"'></a>");
+                }
+                $(".article-inner .fancy-ctn").fancybox();
+            }
+        });
 
-			$window.on('load', function() {
-				window.setTimeout(function() {
-					$body.removeClass('is-loading');
-				}, 100);
-			});
+    }
+    //是否开启动画
+    if(yiliaConfig.animate === true){
 
-		// Touch?
-			if (skel.vars.touch)
-				$body.addClass('is-touch');
+        require(['/js/jquery.lazyload.js'], function(){
+            //avatar
+            $(".js-avatar").attr("src", $(".js-avatar").attr("lazy-src"));
+            $(".js-avatar")[0].onload = function(){
+                $(".js-avatar").addClass("show");
+            }
+        });
 
-		// Forms.
-			var $form = $('form');
+      if(yiliaConfig.isHome === true) {
+        // 滚动条监听使用scrollreveal.js
+        // https://github.com/jlmakes/scrollreveal.js
+        // 使用cdn[//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js]
+        require([
+          '//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js'
+        ], function (ScrollReveal) {
+          // 更多animation:
+          // http://daneden.github.io/animate.css/
+          var animationNames = [
+            "pulse", "fadeIn","fadeInRight", "flipInX", "lightSpeedIn","rotateInUpLeft", "slideInUp","zoomIn",
+            ],
+            len = animationNames.length,
+            randomAnimationName = animationNames[Math.ceil(Math.random() * len) - 1];
 
-			// Auto-resizing textareas.
-				$form.find('textarea').each(function() {
+          // ie9 不支持css3 keyframe动画, safari不支持requestAnimationFrame, 不使用随机动画，切回原来的动画
+          if (!window.requestAnimationFrame) {
+              $('.body-wrap > article').css({opacity: 1});
 
-					var $this = $(this),
-						$wrapper = $('<div class="textarea-wrapper"></div>'),
-						$submits = $this.find('input[type="submit"]');
+              if (navigator.userAgent.match(/Safari/i)) {
+                  function showArticle(){
+                      $(".article").each(function(){
+                          if( $(this).offset().top <= $(window).scrollTop()+$(window).height() && !($(this).hasClass('show')) ) {
+                              $(this).removeClass("hidden").addClass("show");
+                              $(this).addClass("is-hiddened");
+                          }else{
+                              if(!$(this).hasClass("is-hiddened")){
+                                  $(this).addClass("hidden");
+                              }
+                          }
+                      });
+                  }
+                  $(window).on('scroll', function(){
+                      showArticle();
+                  });
+                  showArticle();
+              }
+              return;
+          }
+          // document.body有些浏览器不支持监听scroll，所以使用默认的document.documentElement
+          ScrollReveal({
+            duration: 0,
+            afterReveal: function (domEl) {
+              // safari不支持requestAnimationFrame不支持document.documentElement的onscroll所以这里不会执行
+              // 初始状态设为opacity: 0, 动画效果更平滑一些(由于脚本加载是异步，页面元素渲染后在执行动画，感觉像是延时)
+              $(domEl).addClass('animated ' + randomAnimationName).css({opacity: 1});
+            }
+          }).reveal('.body-wrap > article');
 
-					$this
-						.wrap($wrapper)
-						.attr('rows', 1)
-						.css('overflow', 'hidden')
-						.css('resize', 'none')
-						.on('keydown', function(event) {
+        });
+      } else {
+        $('.body-wrap > article').css({opacity: 1});
+      }
 
-							if (event.keyCode == 13
-							&&	event.ctrlKey) {
+    }
 
-								event.preventDefault();
-								event.stopPropagation();
-
-								$(this).blur();
-
-							}
-
-						})
-						.on('blur focus', function() {
-							$this.val($.trim($this.val()));
-						})
-						.on('input blur focus --init', function() {
-
-							$wrapper
-								.css('height', $this.height());
-
-							$this
-								.css('height', 'auto')
-								.css('height', $this.prop('scrollHeight') + 'px');
-
-						})
-						.on('keyup', function(event) {
-
-							if (event.keyCode == 9)
-								$this
-									.select();
-
-						})
-						.triggerHandler('--init');
-
-					// Fix.
-						if (skel.vars.browser == 'ie'
-						||	skel.vars.mobile)
-							$this
-								.css('max-height', '10em')
-								.css('overflow-y', 'auto');
-
-				});
-
-			// Fix: Placeholder polyfill.
-				$form.placeholder();
-
-		// Prioritize "important" elements on medium.
-			skel.on('+medium -medium', function() {
-				$.prioritize(
-					'.important\\28 medium\\29',
-					skel.breakpoint('medium').active
-				);
-			});
-
-		// Menu.
-			var $menu = $('#menu');
-
-			$menu.wrapInner('<div class="inner"></div>');
-
-			$menu._locked = false;
-
-			$menu._lock = function() {
-
-				if ($menu._locked)
-					return false;
-
-				$menu._locked = true;
-
-				window.setTimeout(function() {
-					$menu._locked = false;
-				}, 350);
-
-				return true;
-
-			};
-
-			$menu._show = function() {
-
-				if ($menu._lock())
-					$body.addClass('is-menu-visible');
-
-			};
-
-			$menu._hide = function() {
-
-				if ($menu._lock())
-					$body.removeClass('is-menu-visible');
-
-			};
-
-			$menu._toggle = function() {
-
-				if ($menu._lock())
-					$body.toggleClass('is-menu-visible');
-
-			};
-
-			$menu
-				.appendTo($body)
-				.on('click', function(event) {
-					event.stopPropagation();
-				})
-				.on('click', 'a', function(event) {
-
-					var href = $(this).attr('href');
-
-					event.preventDefault();
-					event.stopPropagation();
-
-					// Hide.
-						$menu._hide();
-
-					// Redirect.
-						if (href == '#menu')
-							return;
-
-						window.setTimeout(function() {
-							window.location.href = href;
-						}, 350);
-
-				})
-				.append('<a class="close" href="#menu">Close</a>');
-
-			$body
-				.on('click', 'a[href="#menu"]', function(event) {
-
-					event.stopPropagation();
-					event.preventDefault();
-
-					// Toggle.
-						$menu._toggle();
-
-				})
-				.on('click', function(event) {
-
-					// Hide.
-						$menu._hide();
-
-				})
-				.on('keydown', function(event) {
-
-					// Hide on escape.
-						if (event.keyCode == 27)
-							$menu._hide();
-
-				});
-
-	});
-
-})(jQuery);
+    //是否新窗口打开链接
+    if(yiliaConfig.open_in_new == true){
+        $(".article a[href]").attr("target", "_blank")
+    }
+    $(".archive-article-title").attr("target", "_blank");
+});
