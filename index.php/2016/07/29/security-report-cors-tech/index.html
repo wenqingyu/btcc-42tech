@@ -330,18 +330,33 @@ img.emoji {
 								<div class="tab-comments tab">
 								
 									
-		
-		
-					<div id="respond" class="comment-respond">
-			<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="https://wenqingyu.github.io/btcc-42tech/index.php/2016/07/29/security-report-cors-tech/#respond" style="display:none;">Cancel reply</a></small></h3>				<form action="https://wenqingyu.github.io/btcc-42tech/wp-comments-post.php" method="post" id="commentform" class="comment-form">
-					<p class="comment-notes">Your email address will not be published.</p><p class="comment-form-comment"><label for="comment">Comment</label><textarea id="comment" name="comment" cols="45" rows="6" required></textarea></p><p class="comment-form-author"><label for="author">Name <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30" maxlength="245" aria-required='true' required='required' /></p>
-<p class="comment-form-email"><label for="email">Email <span class="required">*</span></label> <input id="email" name="email" type="text" value="" size="30" maxlength="100" aria-describedby="email-notes" aria-required='true' required='required' /></p>
-<p class="comment-form-url"><label for="url">Website</label> <input id="url" name="url" type="text" value="" size="30" maxlength="200" /></p>
-<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Post Comment" /> <input type='hidden' name='comment_post_ID' value='21' id='comment_post_ID' />
-<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
-</p>				</form>
-					</div><!-- #respond -->
-										
+<div id="comments" class="comments-area">
+
+
+	<div id="disqus_thread"></div>
+	<!-- pipDisqus -->
+	<script>
+
+	var disqus_config = function () {
+		this.page.url = "https://wenqingyu.github.io/btcc-42tech/index.php/2016/07/29/security-report-cors-tech/";
+		this.page.identifier = "21 https://wenqingyu.github.io/btcc-42tech/?p=21";
+		//this.page.identifier = "21";
+		this.page.title = "Security Report: CORs Tech";
+	};
+	(function() {
+		var d = document, s = d.createElement('script');
+			
+		s.src = 'https://https-wenqingyu-github-io-btcc-42tech.disqus.com/embed.js';
+			
+		s.setAttribute('data-timestamp', +new Date());
+		(d.head || d.body).appendChild(s);
+	})();
+	</script>
+	
+	<noscript>Please enable JavaScript to view comments powered by Disqus.</noscript>
+	
+
+</div>								
 								</div> <!-- /tab-comments -->
 							
 							</div> <!-- /post-meta-tabs-inner -->
@@ -428,6 +443,7 @@ img.emoji {
 <script type='text/javascript' src='https://wenqingyu.github.io/btcc-42tech/wp-content/themes/garfunkel/js/global.js?ver=4.6-RC1-38170'></script>
 <script type='text/javascript' src='https://wenqingyu.github.io/btcc-42tech/wp-includes/js/comment-reply.min.js?ver=4.6-RC1-38170'></script>
 <script type='text/javascript' src='https://wenqingyu.github.io/btcc-42tech/wp-includes/js/wp-embed.min.js?ver=4.6-RC1-38170'></script>
-
+	<script id="dsq-count-scr" src="https://https-wenqingyu-github-io-btcc-42tech.disqus.com/count.js" async></script>
+	
 </body>
 </html>
