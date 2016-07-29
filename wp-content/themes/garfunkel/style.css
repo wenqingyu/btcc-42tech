@@ -277,7 +277,7 @@ a .post-icon img {
 }
 
 .bg-image.master {
-	background-image: url(http://wenqingyu.github.io/btcc-42tech/wp-content/themes/garfunkel/images/bg.jpg);
+	background-image: url(https://wenqingyu.github.io/btcc-42tech/wp-content/themes/garfunkel/images/bg.jpg);
 	background-repeat: no-repeat;
 	background-position: center top;
 }
@@ -941,12 +941,12 @@ a .post-icon img {
 
 .flex-direction-nav .flex-prev { 
 	left: 0; 
-	background-image: url(http://wenqingyu.github.io/btcc-42tech/wp-content/themes/garfunkel/images/icons/chevron-left_w.png);
+	background-image: url(https://wenqingyu.github.io/btcc-42tech/wp-content/themes/garfunkel/images/icons/chevron-left_w.png);
 }
 
 .flex-direction-nav .flex-next { 
 	right: 0; 
-	background-image: url(http://wenqingyu.github.io/btcc-42tech/wp-content/themes/garfunkel/images/icons/chevron-right_w.png);
+	background-image: url(https://wenqingyu.github.io/btcc-42tech/wp-content/themes/garfunkel/images/icons/chevron-right_w.png);
 }
 
 .flex-direction-nav a:hover { 
